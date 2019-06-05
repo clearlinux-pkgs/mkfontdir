@@ -4,7 +4,7 @@
 #
 Name     : mkfontdir
 Version  : 1.0.7
-Release  : 11
+Release  : 12
 URL      : http://ftp.x.org/pub/individual/app/mkfontdir-1.0.7.tar.bz2
 Source0  : http://ftp.x.org/pub/individual/app/mkfontdir-1.0.7.tar.bz2
 Summary  : No detailed summary available
