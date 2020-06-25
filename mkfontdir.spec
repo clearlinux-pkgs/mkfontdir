@@ -4,14 +4,15 @@
 #
 Name     : mkfontdir
 Version  : 1.0.7
-Release  : 12
+Release  : 14
 URL      : http://ftp.x.org/pub/individual/app/mkfontdir-1.0.7.tar.bz2
 Source0  : http://ftp.x.org/pub/individual/app/mkfontdir-1.0.7.tar.bz2
 Summary  : No detailed summary available
 Group    : Development/Tools
-License  : MIT
-Requires: mkfontdir-bin
-Requires: mkfontdir-doc
+License  : MIT-Opengroup
+Requires: mkfontdir-bin = %{version}-%{release}
+Requires: mkfontdir-license = %{version}-%{release}
+Requires: mkfontdir-man = %{version}-%{release}
 BuildRequires : pkgconfig(xorg-macros)
 
 %description
@@ -22,31 +23,61 @@ around the mkfontscale program, which must be built and installed first.
 %package bin
 Summary: bin components for the mkfontdir package.
 Group: Binaries
+Requires: mkfontdir-license = %{version}-%{release}
 
 %description bin
 bin components for the mkfontdir package.
 
 
-%package doc
-Summary: doc components for the mkfontdir package.
-Group: Documentation
+%package license
+Summary: license components for the mkfontdir package.
+Group: Default
 
-%description doc
-doc components for the mkfontdir package.
+%description license
+license components for the mkfontdir package.
+
+
+%package man
+Summary: man components for the mkfontdir package.
+Group: Default
+
+%description man
+man components for the mkfontdir package.
 
 
 %prep
 %setup -q -n mkfontdir-1.0.7
+cd %{_builddir}/mkfontdir-1.0.7
 
 %build
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1593110166
+export GCC_IGNORE_WERROR=1
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
 %configure --disable-static
-make V=1 %{?_smp_mflags}
+make  %{?_smp_mflags}
 
 %check
+export LANG=C.UTF-8
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
+export SOURCE_DATE_EPOCH=1593110166
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/mkfontdir
+cp %{_builddir}/mkfontdir-1.0.7/COPYING %{buildroot}/usr/share/package-licenses/mkfontdir/613732109bb85dacf28dccf37b7ec0c212124ecd
 %make_install
 
 %files
@@ -56,6 +87,10 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 /usr/bin/mkfontdir
 
-%files doc
-%defattr(-,root,root,-)
-%doc /usr/share/man/man1/*
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/mkfontdir/613732109bb85dacf28dccf37b7ec0c212124ecd
+
+%files man
+%defattr(0644,root,root,0755)
+/usr/share/man/man1/mkfontdir.1
